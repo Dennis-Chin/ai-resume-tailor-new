@@ -1,6 +1,6 @@
 # AI Cover Letter Generator (MVP)
 
-A decoupled, full-stack web application that generates tailored cover letters by cross-referencing a user's resume with a target job description using the Gemini 1.5 Flash model.
+A decoupled, full-stack web application that generates tailored cover letters by cross-referencing a user's resume with a target job description using the Gemini 3.1 Flash Lite model.
 
 ## 🏗 Architecture & Design Decisions
 
