@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI Cover Letter Generator (MVP)
 
-## Getting Started
+A decoupled, full-stack web application that generates tailored cover letters by cross-referencing a user's resume with a target job description using the Gemini 1.5 Flash model.
 
-First, run the development server:
+## 🏗 Architecture & Design Decisions
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+This project uses a **Service-Boundary** pattern, strictly separating the user interface from the AI inference engine. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*   **Frontend (Next.js / TypeScript / React):** 
+    Handles state management and user input via controlled components. It is completely blind to the AI logic, acting only as a client that sends JSON payloads and receives text.
+*   **Backend (Python / FastAPI):** 
+    Acts as an isolated microservice. It handles prompt construction, secures the API keys via environment variables, and manages the network call to the Google Generative AI API.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Why decoupled?** 
+This architecture provides maximum leverage. The Python backend can be scaled independently, swapped to a different LLM (like Claude or OpenAI) without touching the UI, or connected to a completely different frontend (like a React Native mobile app) in the future.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Local Setup
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Start the AI Engine (Backend):**
+   ```bash
+   cd backend
+   python -m venv venv
+   .\venv\Scripts\activate
+   pip install -r requirements.txt
+   uvicorn main:app --reload
