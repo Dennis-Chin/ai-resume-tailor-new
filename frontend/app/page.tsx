@@ -11,11 +11,11 @@ export default function Home() {
 
   // This function runs when the user clicks "Generate"
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevents the page from refreshing on submit
+    e.preventDefault(); 
     setIsLoading(true);
+    setGeneratedLetter(""); // Clear previous errors or letters
 
     try {
-      // Pattern: This is the standard way to send data from a frontend to an API
       const response = await fetch("http://localhost:8000/api/generate", {
         method: "POST",
         headers: {
@@ -27,12 +27,20 @@ export default function Home() {
         }),
       });
 
+      // NEW: Catch backend errors (like the 503/500 from Google) before they crash the app
+      if (!response.ok) {
+        throw new Error("The AI server is busy or returned an error. Please try again.");
+      }
+
       const data = await response.json();
       setGeneratedLetter(data.cover_letter);
+      
     } catch (error) {
       console.error("Error:", error);
-      setGeneratedLetter("Connection failed. Is the Python server running?");
+      // This will now successfully display on the screen when Google is overloaded
+      setGeneratedLetter(error instanceof Error ? error.message : "Connection failed.");
     } finally {
+      // This will now always run, un-sticking the button
       setIsLoading(false);
     }
   };
