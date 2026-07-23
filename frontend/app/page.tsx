@@ -77,12 +77,12 @@ export default function Home() {
             />
           </div>
 
+          {/* UI UPDATE: Changed the button text */}
           <button 
             type="submit" 
             disabled={isLoading}
             className="bg-blue-600 text-white p-3 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400"
           >
-            {/* UI UPDATE: Changed the button text */}
             {isLoading ? "Generating..." : "Tailor Resume"}
           </button>
         </form>
@@ -93,8 +93,10 @@ export default function Home() {
           {tailoredResume ? (
             <div className="whitespace-pre-wrap text-gray-700">{tailoredResume}</div>
           ) : (
-            {/* UI UPDATE: Changed placeholder text */}
-            <p className="text-gray-400 italic">Your tailored resume will appear here.</p>
+            <>
+              {/* UI UPDATE: Changed placeholder text. Notice the <> </> Fragment wrapped around it! */}
+              <p className="text-gray-400 italic">Your tailored resume will appear here.</p>
+            </>
           )}
         </div>
       </div>
