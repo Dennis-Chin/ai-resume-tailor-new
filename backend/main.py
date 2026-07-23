@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 # Load variables from the .env file into the environment
 load_dotenv()
 
-app = FastAPI(title="Cover Letter API")
+app = FastAPI(title="Resume/CV API")
 
 # 2. Add this entire block to give the VIP pass to your frontend
 app.add_middleware(
@@ -67,8 +67,8 @@ async def generate_letter(request: Request, generation_request: GenerationReques
             contents=prompt,
         )
         
-        return {"cover_letter": response.text}
+        return {"Resume/CV": response.text}
         
     except Exception as e:
         print(f"Error calling Gemini: {e}") 
-        raise HTTPException(status_code=500, detail="Failed to generate cover letter.")
+        raise HTTPException(status_code=500, detail="Failed to generate suggestions.")

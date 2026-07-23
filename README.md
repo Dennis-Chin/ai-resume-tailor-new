@@ -26,9 +26,9 @@ This architecture provides maximum leverage. The Python backend can be scaled in
    pip install -r requirements.txt
    uvicorn main:app --reload
 
-# AI Cover Letter Generator 🚀
+# AI Resume/CV Generator 🚀
 
-A full-stack web application that uses Google's Gemini AI to automatically generate tailored, professional cover letters by comparing a user's resume against a specific job description.
+A full-stack web application that uses Google's Gemini AI to automatically generate tailored, professional resume/cv suggestions by comparing a user's resume against a specific job description.
 
 **[Live Demo](https://ai-resume-tailor-new.vercel.app)**
 
