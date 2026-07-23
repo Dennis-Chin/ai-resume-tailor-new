@@ -10,11 +10,12 @@ load_dotenv()
 
 app = FastAPI(title="Cover Letter API")
 
+# 2. Add this entire block to give the VIP pass to your frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:3001"], 
+    allow_origins=["*"],  # Allows any frontend URL to connect
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["*"],  # Allows POST requests
     allow_headers=["*"],
 )
 
