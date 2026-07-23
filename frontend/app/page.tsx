@@ -6,14 +6,14 @@ export default function Home() {
   // State variables hold the data as the user types and when the backend responds
   const [jobDescription, setJobDescription] = useState("");
   const [resumeText, setResumeText] = useState("");
-  const [generatedLetter, setGeneratedLetter] = useState("");
+  const [tailoredResume, setTailoredResume] = useState(""); // RENAMED
   const [isLoading, setIsLoading] = useState(false);
 
   // This function runs when the user clicks "Generate"
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault(); 
     setIsLoading(true);
-    setGeneratedLetter(""); // Clear previous errors or letters
+    setTailoredResume(""); // Clear previous errors or resumes
 
     try {
       const response = await fetch("https://ai-resume-tailor-new.onrender.com/api/generate", {
@@ -27,18 +27,20 @@ export default function Home() {
         }),
       });
 
-      // NEW: Catch backend errors (like the 503/500 from Google) before they crash the app
+      // Catch backend errors (like the 503/500 from Google) before they crash the app
       if (!response.ok) {
         throw new Error("The AI server is busy or returned an error. Please try again.");
       }
 
       const data = await response.json();
-      setGeneratedLetter(data.cover_letter);
+      
+      // THE CONTRACT: We must look for 'tailored_resume' to match the updated Python backend
+      setTailoredResume(data.tailored_resume); 
       
     } catch (error) {
       console.error("Error:", error);
       // This will now successfully display on the screen when Google is overloaded
-      setGeneratedLetter(error instanceof Error ? error.message : "Connection failed.");
+      setTailoredResume(error instanceof Error ? error.message : "Connection failed.");
     } finally {
       // This will now always run, un-sticking the button
       setIsLoading(false);
@@ -47,7 +49,8 @@ export default function Home() {
 
   return (
     <main className="max-w-4xl mx-auto p-8 font-sans">
-      <h1 className="text-3xl font-bold mb-8">AI Cover Letter Generator</h1>
+      {/* UI UPDATE: Changed the main title */}
+      <h1 className="text-3xl font-bold mb-8">AI Resume Tailor</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* LEFT COLUMN: Input Form */}
@@ -79,17 +82,19 @@ export default function Home() {
             disabled={isLoading}
             className="bg-blue-600 text-white p-3 rounded-md font-medium hover:bg-blue-700 disabled:bg-gray-400"
           >
-            {isLoading ? "Generating..." : "Generate Cover Letter"}
+            {/* UI UPDATE: Changed the button text */}
+            {isLoading ? "Generating..." : "Tailor Resume"}
           </button>
         </form>
 
         {/* RIGHT COLUMN: Results Display */}
         <div className="bg-gray-50 p-6 rounded-md border h-full">
           <h2 className="text-xl font-semibold mb-4 text-gray-800">Output</h2>
-          {generatedLetter ? (
-            <div className="whitespace-pre-wrap text-gray-700">{generatedLetter}</div>
+          {tailoredResume ? (
+            <div className="whitespace-pre-wrap text-gray-700">{tailoredResume}</div>
           ) : (
-            <p className="text-gray-400 italic">Your generated letter will appear here.</p>
+            {/* UI UPDATE: Changed placeholder text */}
+            <p className="text-gray-400 italic">Your tailored resume will appear here.</p>
           )}
         </div>
       </div>
