@@ -16,7 +16,7 @@ export default function Home() {
     setGeneratedLetter(""); // Clear previous errors or letters
 
     try {
-      const response = await fetch("https://ai-resume-tailor-backend-838j.onrender.com", {
+      const response = await fetch("https://ai-resume-tailor-backend-838j.onrender.com/api/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
