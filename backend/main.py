@@ -44,17 +44,18 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 @app.post("/api/generate")
 @limiter.limit("5/minute") 
 async def generate_letter(request: Request, generation_request: GenerationRequest):
-        try:
+    try:
+        # Notice how everything in here is pushed 4 spaces to the right of 'try:'
         prompt = f"""
         You are an expert career coach and cover letter writer. 
         Write a professional, compelling cover letter based on the following inputs.
         Do not include any placeholder brackets like [Your Name] — format it so I can copy and paste it directly.
 
         Job Description:
-        {request.job_description}
+        {generation_request.job_description}
 
         My Resume:
-        {request.resume_text}
+        {generation_request.resume_text}
         """
 
         # Make the call using the new SDK syntax
