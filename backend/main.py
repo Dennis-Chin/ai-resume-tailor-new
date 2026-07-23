@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from google import genai
@@ -26,9 +26,25 @@ class GenerationRequest(BaseModel):
 # It automatically finds GEMINI_API_KEY in the environment.
 client = genai.Client()
 
+
+
+
+
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
+from fastapi import Request
+
+# Create the limiter
+limiter = Limiter(key_func=get_remote_address)
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# Apply the limiter to your route (e.g., 5 requests per minute)
 @app.post("/api/generate")
-async def generate_letter(request: GenerationRequest):
-    try:
+@limiter.limit("5/minute") 
+async def generate_letter(request: Request, generation_request: GenerationRequest):
+        try:
         prompt = f"""
         You are an expert career coach and cover letter writer. 
         Write a professional, compelling cover letter based on the following inputs.
@@ -52,19 +68,3 @@ async def generate_letter(request: GenerationRequest):
     except Exception as e:
         print(f"Error calling Gemini: {e}") 
         raise HTTPException(status_code=500, detail="Failed to generate cover letter.")
-
-from slowapi import Limiter, _rate_limit_exceeded_handler
-from slowapi.util import get_remote_address
-from slowapi.errors import RateLimitExceeded
-from fastapi import Request
-
-# Create the limiter
-limiter = Limiter(key_func=get_remote_address)
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
-# Apply the limiter to your route (e.g., 5 requests per minute)
-@app.post("/api/generate")
-@limiter.limit("5/minute") 
-async def generate_letter(request: Request, generation_request: GenerationRequest):
-    # ... your existing code here ...
