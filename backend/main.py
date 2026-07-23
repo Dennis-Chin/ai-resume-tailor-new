@@ -49,10 +49,11 @@ async def generate_letter(request: Request, generation_request: GenerationReques
         # Notice how everything in here is pushed 4 spaces to the right of 'try:'
         prompt = f"""
         Provide a score out of 100 based on how effective it is and list key ways to improve it.
-        You are an expert career coach and cover letter writer.
+        You are an expert career coach and resume/cv tailor writer.
         Suggest critical concise key improvements where necessary to improve the input only where necessary. 
-        Write a professional, compelling cover letter based on the following inputs.
+        Write a professional, compelling resume/cv based on the following inputs.
         Do not include any placeholder brackets like [Your Name] — format it so I can copy and paste it directly.
+        Avoid using * excessively and ensure that output is clear and concise and easy to understand.
         Job Description:
         {generation_request.job_description}
 
